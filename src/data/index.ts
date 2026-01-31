@@ -85,6 +85,42 @@ export function getTotalModuleCount(): number {
   return allSkills.reduce((total, skill) => total + skill.modules.length, 0);
 }
 
+/**
+ * Get all prerequisite links for the tech tree
+ */
+export function getTechTreeLinks(): Array<{ source: string; target: string }> {
+  const links: Array<{ source: string; target: string }> = [];
+  for (const skill of allSkills) {
+    for (const prereq of skill.prerequisites) {
+      links.push({ source: prereq, target: skill.id });
+    }
+  }
+  return links;
+}
+
+/**
+ * Get skills that have no prerequisites (root skills)
+ */
+export function getRootSkills(): Skill[] {
+  return allSkills.filter((skill) => skill.prerequisites.length === 0);
+}
+
+/**
+ * Get skills that depend on a given skill
+ */
+export function getDependentSkills(skillId: string): Skill[] {
+  return allSkills.filter((skill) => skill.prerequisites.includes(skillId));
+}
+
+/**
+ * Check if all prerequisites for a skill are met
+ */
+export function canUnlockSkill(skillId: string, completedSkills: string[]): boolean {
+  const skill = getSkillById(skillId);
+  if (!skill) return false;
+  return skill.prerequisites.every((prereq) => completedSkills.includes(prereq));
+}
+
 // Re-export era-specific skills for direct access
 export { eras } from './eras';
 export { ancientSkills } from './ancient';

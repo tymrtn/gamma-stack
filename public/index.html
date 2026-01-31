@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gamma Stack - Historical Skills Tech Tree</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #e8e8e8;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Main visualization area */
+    #tech-tree {
+      flex: 1;
+      position: relative;
+    }
+
+    #tech-tree svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Header */
+    .header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 300px;
+      padding: 20px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, transparent 100%);
+      z-index: 10;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      color: #f4d03f;
+      text-shadow: 0 0 20px rgba(244, 208, 63, 0.5);
+    }
+
+    .header p {
+      font-size: 14px;
+      opacity: 0.7;
+      margin-top: 5px;
+    }
+
+    /* Era legend */
+    .era-legend {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .era-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .era-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    /* Side panel */
+    .side-panel {
+      width: 350px;
+      background: rgba(0, 0, 0, 0.8);
+      border-left: 1px solid rgba(244, 208, 63, 0.3);
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      border-bottom: 2px solid rgba(244, 208, 63, 0.3);
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+
+    .skill-name {
+      font-size: 24px;
+      color: #f4d03f;
+      margin-bottom: 5px;
+    }
+
+    .skill-era {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.7;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #f4d03f;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 4px;
+      background: #f4d03f;
+      border-radius: 50%;
+    }
+
+    .module-list, .place-list, .partner-list, .requirement-list {
+      list-style: none;
+    }
+
+    .module-list li, .place-list li, .partner-list li, .requirement-list li {
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      margin-bottom: 5px;
+      border-radius: 5px;
+      font-size: 13px;
+      border-left: 3px solid transparent;
+    }
+
+    .module-list li { border-left-color: #3498db; }
+    .place-list li { border-left-color: #2ecc71; }
+    .partner-list li { border-left-color: #9b59b6; }
+    .requirement-list li { border-left-color: #e74c3c; }
+
+    .item-type {
+      font-size: 10px;
+      opacity: 0.6;
+      text-transform: uppercase;
+      margin-left: 5px;
+    }
+
+    .artifact-box {
+      background: rgba(244, 208, 63, 0.1);
+      border: 1px solid rgba(244, 208, 63, 0.3);
+      border-radius: 8px;
+      padding: 15px;
+    }
+
+    .artifact-desc {
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    .prerequisites {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .prereq-tag {
+      background: rgba(52, 152, 219, 0.2);
+      border: 1px solid rgba(52, 152, 219, 0.5);
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .prereq-tag:hover {
+      background: rgba(52, 152, 219, 0.4);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      opacity: 0.5;
+    }
+
+    .empty-state p {
+      margin-top: 10px;
+    }
+
+    /* D3 styles */
+    .node {
+      cursor: pointer;
+    }
+
+    .node circle {
+      stroke-width: 3px;
+      transition: all 0.2s;
+    }
+
+    .node:hover circle {
+      stroke-width: 5px;
+      filter: brightness(1.2);
+    }
+
+    .node.selected circle {
+      stroke: #fff !important;
+      stroke-width: 4px;
+    }
+
+    .node text {
+      font-size: 11px;
+      fill: #fff;
+      text-anchor: middle;
+      pointer-events: none;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
+
+    .link {
+      stroke: rgba(255, 255, 255, 0.2);
+      stroke-width: 1.5px;
+      fill: none;
+    }
+
+    .link.highlighted {
+      stroke: rgba(244, 208, 63, 0.6);
+      stroke-width: 3px;
+    }
+
+    /* Controls */
+    .controls {
+      position: absolute;
+      top: 80px;
+      left: 20px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .control-btn {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(244, 208, 63, 0.3);
+      color: #f4d03f;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .control-btn:hover {
+      background: rgba(244, 208, 63, 0.2);
+    }
+
+    /* Stats */
+    .stats {
+      position: absolute;
+      top: 80px;
+      right: 370px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 5px;
+    }
+
+    .stat-value {
+      color: #f4d03f;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="tech-tree">
+      <div class="header">
+        <h1>GAMMA STACK</h1>
+        <p>Historical Skills Curriculum - Interactive Tech Tree</p>
+      </div>
+
+      <div class="controls">
+        <button class="control-btn" onclick="resetZoom()">Reset View</button>
+        <button class="control-btn" onclick="toggleLayout()">Toggle Layout</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat-item">
+          <span>Total Skills</span>
+          <span class="stat-value" id="stat-skills">0</span>
+        </div>
+        <div class="stat-item">
+          <span>Eras</span>
+          <span class="stat-value" id="stat-eras">7</span>
+        </div>
+        <div class="stat-item">
+          <span>Connections</span>
+          <span class="stat-value" id="stat-links">0</span>
+        </div>
+      </div>
+
+      <div class="era-legend" id="era-legend"></div>
+    </div>
+
+    <div class="side-panel">
+      <div id="skill-details">
+        <div class="empty-state">
+          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+          <p>Click on a skill node to view details</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Era colors - Civ-inspired palette
+    const eraColors = {
+      ancient: '#cd7f32',      // Bronze
+      classical: '#4a90d9',    // Blue marble
+      medieval: '#8b4513',     // Dark wood
+      renaissance: '#9932cc',  // Purple/violet
+      industrial: '#708090',   // Steel gray
+      modern: '#228b22',       // Forest green
+      information: '#00ced1'   // Cyan/digital
+    };
+
+    const eraNames = {
+      ancient: 'Ancient Era',
+      classical: 'Classical Era',
+      medieval: 'Medieval Era',
+      renaissance: 'Renaissance Era',
+      industrial: 'Industrial Era',
+      modern: 'Modern Era',
+      information: 'Information Era'
+    };
+
+    const eraOrder = ['ancient', 'classical', 'medieval', 'renaissance', 'industrial', 'modern', 'information'];
+
+    // Curriculum data - embedded from TypeScript sources
+    const skills = [
+      // Ancient Era
+      { id: 'pottery', name: 'Pottery', era: 'ancient', prerequisites: [], modules: [{name:'Fire Basics'},{name:'Kiln Basics'},{name:'Clay Sourcing/Prep'},{name:'Forming'},{name:'Drying/Cracking'},{name:'Firing'},{name:'Sealing/Glaze Optional'},{name:'Liquid Containment Physics'}], places: [{name:'Pottery Studio',type:'studio'},{name:'Archaeology Museum',type:'museum'}], partners: [{name:'Ceramics Guild',type:'guild'},{name:'Potter/Ceramicist',type:'professional'}], artifact: {description:'Fired vessel that holds water for 24 hours with iteration log', requirements:['Fired vessel holds water 24h','3-iteration log documenting improvements']} },
+      { id: 'animal-husbandry', name: 'Animal Husbandry', era: 'ancient', prerequisites: [], modules: [{name:'Feeding/Water'},{name:'Shelter'},{name:'Health Signs'},{name:'Ethics'},{name:'Breeding Basics'}], places: [{name:'Working Farm',type:'facility'},{name:'Stable/Ranch',type:'facility'},{name:'Veterinary Clinic',type:'facility'}], partners: [{name:'Farmer',type:'professional'},{name:'Veterinarian',type:'professional'},{name:'4-H Club',type:'club'}], artifact: {description:'30-day care log with cost plan', requirements:['30-day care log','Cost plan for ongoing care']} },
+      { id: 'agriculture', name: 'Agriculture', era: 'ancient', prerequisites: [], modules: [{name:'Soil/Compost'},{name:'Planting'},{name:'Watering'},{name:'Pests'},{name:'Harvest'},{name:'Storage'}], places: [{name:'Community Garden',type:'outdoor'},{name:'Working Farm',type:'facility'},{name:'Botanical Garden',type:'institution'}], partners: [{name:'Master Gardener',type:'mentor'},{name:'Farmer',type:'professional'},{name:'Agricultural Extension',type:'organization'}], artifact: {description:'Edible harvest with yield log', requirements:['Edible harvest produced','Yield log documenting growth']} },
+      { id: 'mining', name: 'Mining', era: 'ancient', prerequisites: [], modules: [{name:'Ore/Rock ID'},{name:'Basic Excavation Safety'},{name:'Crushing/Sorting'},{name:'Yield Estimation'}], places: [{name:'Geology Museum',type:'museum'},{name:'Supervised Quarry',type:'facility'},{name:'Mine Tour Site',type:'historic-site'}], partners: [{name:'Mineral Club',type:'club'},{name:'Geologist',type:'professional'}], artifact: {description:'Labeled collection with rock to metal map', requirements:['Labeled collection of samples','"From rock to metal" process map']} },
+      { id: 'masonry', name: 'Masonry', era: 'ancient', prerequisites: ['mining'], modules: [{name:'Stone/Brick'},{name:'Mortar Basics'},{name:'Leveling'},{name:'Load Paths'},{name:'Drainage'}], places: [{name:'Historic Stone Structure',type:'historic-site'},{name:'Masonry Workshop',type:'workspace'}], partners: [{name:'Stonemason',type:'professional'},{name:'Builder',type:'professional'}], artifact: {description:'Small structure that survives rain and load test', requirements:['Small structure built','Survives rain test','Passes load test']} },
+      { id: 'archery', name: 'Archery', era: 'ancient', prerequisites: [], modules: [{name:'Safety'},{name:'Stance'},{name:'Draw'},{name:'Aiming'},{name:'Maintenance'}], places: [{name:'Archery Range',type:'facility'}], partners: [{name:'Archery Club',type:'club'},{name:'Archery Instructor',type:'professional'}], artifact: {description:'Hit targets at set distances with safety certification', requirements:['Hit targets at set distances','Safety certification earned']} },
+      { id: 'the-wheel', name: 'The Wheel', era: 'ancient', prerequisites: [], modules: [{name:'Axle/Bearing Friction'},{name:'Alignment'},{name:'Load Balance'},{name:'Materials'}], places: [{name:'Bike Shop',type:'workspace'},{name:'Makerspace',type:'workspace'},{name:'Transportation Museum',type:'museum'}], partners: [{name:'Bike Mechanic',type:'professional'},{name:'Maker Mentor',type:'mentor'}], artifact: {description:'Cart that moves load reliably', requirements:['Cart moves load reliably']} },
+      { id: 'sailing', name: 'Sailing', era: 'ancient', prerequisites: [], modules: [{name:'Knots'},{name:'Wind Forces'},{name:'Sail Trim'},{name:'Safety'},{name:'Basic Navigation'}], places: [{name:'Marina/Harbor',type:'facility'},{name:'Sailing Center',type:'facility'},{name:'Maritime Museum',type:'museum'}], partners: [{name:'Sailing Club',type:'club'},{name:'Sea Scouts',type:'organization'},{name:'Sailing Instructor',type:'professional'}], artifact: {description:'Logbook with basic maneuvers demonstrated', requirements:['Logbook maintained','Basic maneuvers demonstrated']} },
+      { id: 'writing', name: 'Writing', era: 'ancient', prerequisites: [], modules: [{name:'Symbols'},{name:'Legibility'},{name:'Copying'},{name:'Recordkeeping'},{name:'Archiving'}], places: [{name:'Library',type:'institution'},{name:'Writing/Script Museum',type:'museum'},{name:'Historical Archive',type:'institution'}], partners: [{name:'Librarian',type:'professional'},{name:'Calligrapher',type:'professional'}], artifact: {description:'Readable ledger with 30-day records', requirements:['Readable ledger created','30-day records maintained']} },
+      { id: 'calendar', name: 'Calendar', era: 'ancient', prerequisites: [], modules: [{name:'Sun/Shadow'},{name:'Seasons'},{name:'Lunar Phases'},{name:'Timekeeping Build'}], places: [{name:'Observatory',type:'facility'},{name:'Science Museum',type:'museum'},{name:'Stonehenge/Sundial Site',type:'historic-site'}], partners: [{name:'Astronomy Club',type:'club'},{name:'Astronomer',type:'professional'}], artifact: {description:'Working calendar with observation log', requirements:['Working calendar created','Observation log maintained']} },
+      { id: 'bronze-working', name: 'Bronze Working', era: 'ancient', prerequisites: ['mining', 'pottery'], modules: [{name:'Furnace Safety'},{name:'Smelting/Casting Basics'},{name:'Molds'},{name:'Alloy Ratios'},{name:'Hardness Testing'}], places: [{name:'Foundry/Metalworking Studio',type:'studio'},{name:'Bronze Age Museum',type:'museum'}], partners: [{name:'Metalsmith',type:'professional'},{name:'Foundry Instructor',type:'professional'}], artifact: {description:'Cast bronze object with test notes', requirements:['Cast bronze object created','Test notes documenting hardness and quality']} },
+      { id: 'iron-working', name: 'Iron Working', era: 'ancient', prerequisites: ['bronze-working'], modules: [{name:'Bloomery/Forging Overview'},{name:'Heat/Tempering'},{name:'Tools'},{name:'Oxidation Control'}], places: [{name:'Blacksmith Shop',type:'workspace'},{name:'Living History Forge',type:'historic-site'}], partners: [{name:'Blacksmith',type:'professional'},{name:'Metalworking Guild',type:'guild'}], artifact: {description:'Forged iron tool with hardness comparison', requirements:['Forged iron tool created','Hardness comparison documented']} },
+
+      // Classical Era
+      { id: 'mathematics', name: 'Mathematics', era: 'classical', prerequisites: ['writing', 'calendar'], modules: [{name:'Measurement'},{name:'Geometry'},{name:'Ratios'},{name:'Proof Habits'},{name:'Error Analysis'}], places: [{name:'Science Museum',type:'museum'},{name:'University Math Department',type:'institution'}], partners: [{name:'Math Circle',type:'club'},{name:'Surveying Mentor',type:'mentor'},{name:'Math Teacher',type:'professional'}], artifact: {description:'Measured map with tolerances report', requirements:['Measured map created','Tolerances report documenting accuracy']} },
+      { id: 'construction', name: 'Construction', era: 'classical', prerequisites: ['masonry', 'the-wheel'], modules: [{name:'Structural Members'},{name:'Joints'},{name:'Compressive vs Tensile'},{name:'Scaffolding Safety'}], places: [{name:'Builderspace/Makerspace',type:'workspace'},{name:'Carpentry Shop',type:'workspace'},{name:'Construction Site Tour',type:'facility'}], partners: [{name:'Carpenter',type:'professional'},{name:'Structural Engineer',type:'professional'},{name:'Builder',type:'professional'}], artifact: {description:'Bridge or structure that holds defined load', requirements:['Bridge or structure built','Holds defined load safely']} },
+      { id: 'engineering', name: 'Engineering', era: 'classical', prerequisites: ['the-wheel', 'mathematics'], modules: [{name:'Pulleys/Gears/Levers'},{name:'Mechanical Advantage'},{name:'Iteration'},{name:'Testing'}], places: [{name:'Makerspace',type:'workspace'},{name:'Engineering Museum',type:'museum'},{name:'University Engineering Lab',type:'institution'}], partners: [{name:'Engineer Mentor',type:'mentor'},{name:'Maker Community',type:'group'}], artifact: {description:'Machine that does measurable work', requirements:['Machine performs measurable work']} },
+      { id: 'currency', name: 'Currency', era: 'classical', prerequisites: ['writing', 'mining'], modules: [{name:'Value'},{name:'Trust'},{name:'Counterfeits'},{name:'Pricing'},{name:'Exchange'}], places: [{name:'Local Market/Farmers Market',type:'facility'},{name:'Numismatic Museum',type:'museum'},{name:'Federal Reserve/Mint',type:'institution'}], partners: [{name:'Small Business Owner',type:'mentor'},{name:'Economist',type:'professional'}], artifact: {description:'Working token system with market day', requirements:['Working token system created','Market day conducted successfully']} },
+      { id: 'code-of-laws', name: 'Code of Laws', era: 'classical', prerequisites: ['writing'], modules: [{name:'Rules/Enforcement'},{name:'Evidence'},{name:'Procedure'},{name:'Appeals'}], places: [{name:'Courthouse',type:'institution'},{name:'Law Library',type:'institution'},{name:'City Hall',type:'institution'}], partners: [{name:'Debate Club',type:'club'},{name:'Civic Organization',type:'organization'},{name:'Lawyer/Judge',type:'professional'}], artifact: {description:'Constitution with 3 resolved disputes and rulings', requirements:['Constitution drafted','3 disputes resolved','Rulings documented']} },
+      { id: 'philosophy', name: 'Philosophy', era: 'classical', prerequisites: ['writing'], modules: [{name:'Logic'},{name:'Ethics'},{name:'Argument'},{name:'Steelmanning'}], places: [{name:'University Philosophy Department',type:'institution'},{name:'Philosophy Cafe/Salon',type:'facility'}], partners: [{name:'Debate Club',type:'club'},{name:'Philosophy Professor',type:'mentor'}], artifact: {description:'Defended position with revised essay', requirements:['Position defended in debate','Revised essay incorporating feedback']} },
+      { id: 'drama', name: 'Drama', era: 'classical', prerequisites: ['writing'], modules: [{name:'Script'},{name:'Rehearsal'},{name:'Staging'},{name:'Performance Critique'}], places: [{name:'Community Theater',type:'facility'},{name:'Amphitheater/Historic Theater',type:'historic-site'}], partners: [{name:'Theater Group',type:'group'},{name:'Drama Teacher',type:'professional'},{name:'Director',type:'professional'}], artifact: {description:'Performed short play with director notes', requirements:['Short play performed','Director notes documenting process']} },
+      { id: 'literature', name: 'Literature', era: 'classical', prerequisites: ['writing'], modules: [{name:'Narrative'},{name:'Rhetoric'},{name:'Editing'},{name:'Publishing'}], places: [{name:'Library',type:'institution'},{name:'Bookstore',type:'facility'},{name:'Literary Museum',type:'museum'}], partners: [{name:'Writing Circle',type:'group'},{name:'Author/Writer',type:'professional'},{name:'Editor',type:'professional'}], artifact: {description:'Published story with revision history', requirements:['Story published','Revision history documented']} },
+      { id: 'astronomy', name: 'Astronomy', era: 'classical', prerequisites: ['calendar', 'mathematics'], modules: [{name:'Star Charts'},{name:'Seasons'},{name:'Observation'},{name:'Prediction'}], places: [{name:'Observatory',type:'facility'},{name:'Planetarium',type:'facility'},{name:'Dark Sky Site',type:'outdoor'}], partners: [{name:'Astronomy Club',type:'club'},{name:'Astronomer',type:'professional'}], artifact: {description:'Night-sky log with accurate prediction', requirements:['Night-sky observation log','Accurate celestial prediction made']} },
+      { id: 'optics', name: 'Optics', era: 'classical', prerequisites: ['mathematics'], modules: [{name:'Lenses'},{name:'Magnification'},{name:'Light Paths'},{name:'Measurement'}], places: [{name:'Science Museum',type:'museum'},{name:'Optics Lab',type:'facility'}], partners: [{name:'Optics Hobbyist',type:'mentor'},{name:'Optician',type:'professional'},{name:'Physics Teacher',type:'professional'}], artifact: {description:'Simple telescope or microscope with tests', requirements:['Simple telescope or microscope built','Tests documenting magnification']} },
+      { id: 'horseback-riding', name: 'Horseback Riding', era: 'classical', prerequisites: ['animal-husbandry'], modules: [{name:'Safety'},{name:'Handling'},{name:'Tack'},{name:'Care'},{name:'Trail Control'}], places: [{name:'Riding Stable',type:'facility'},{name:'Ranch',type:'facility'},{name:'Equestrian Center',type:'facility'}], partners: [{name:'Riding Instructor',type:'professional'},{name:'Equestrian Club',type:'club'}], artifact: {description:'Ride competency with care log', requirements:['Ride competency demonstrated','Care log maintained']} },
+      { id: 'trapping', name: 'Trapping', era: 'classical', prerequisites: ['animal-husbandry'], modules: [{name:'Ethics'},{name:'Habitats'},{name:'Non-lethal Principles'},{name:'Tracking'},{name:'Reporting'}], places: [{name:'Wildlife Center',type:'facility'},{name:'Nature Reserve',type:'outdoor'},{name:'State/National Park',type:'outdoor'}], partners: [{name:'Park Ranger',type:'professional'},{name:'Wildlife Biologist',type:'professional'},{name:'Naturalist Club',type:'club'}], artifact: {description:'Tracking journal with habitat map', requirements:['Tracking journal maintained','Habitat map created']} },
+
+      // Medieval Era
+      { id: 'machinery', name: 'Machinery', era: 'medieval', prerequisites: ['engineering', 'the-wheel'], modules: [{name:'Cams/Cranks'},{name:'Power Transmission'},{name:'Tolerances'},{name:'Maintenance'}], places: [{name:'Makerspace',type:'workspace'},{name:'Industrial Museum',type:'museum'},{name:'Working Mill (Water/Wind)',type:'historic-site'}], partners: [{name:'Machinist',type:'professional'},{name:'Mechanical Engineer',type:'professional'},{name:'Maker Mentor',type:'mentor'}], artifact: {description:'Mechanism that converts motion reliably', requirements:['Mechanism converts motion reliably']} },
+      { id: 'compass', name: 'Compass', era: 'medieval', prerequisites: ['iron-working', 'sailing'], modules: [{name:'Magnetism Basics'},{name:'Bearings'},{name:'Declination Concept'},{name:'Route Planning'}], places: [{name:'Navigation Museum',type:'museum'},{name:'Hiking Trail',type:'outdoor'},{name:'Orienteering Course',type:'outdoor'}], partners: [{name:'Hiking Club',type:'club'},{name:'Sailing Club',type:'club'},{name:'Orienteering Club',type:'club'},{name:'Scout Leader',type:'mentor'}], artifact: {description:'Waypoint course without GPS with log', requirements:['Waypoint course completed without GPS','Navigation log maintained']} },
+      { id: 'education', name: 'Education', era: 'medieval', prerequisites: ['writing', 'philosophy'], modules: [{name:'Learning How to Learn'},{name:'Note Systems'},{name:'Memory Drills'},{name:'Teaching Others'}], places: [{name:'Library',type:'institution'},{name:'University',type:'institution'},{name:'Historic Schoolhouse',type:'historic-site'}], partners: [{name:'Study Group/Pod',type:'group'},{name:'Teacher/Professor',type:'professional'},{name:'Tutor',type:'mentor'}], artifact: {description:'Teach a skill with learner results', requirements:['Skill taught to another person','Learner results documented']} },
+      { id: 'theology', name: 'Theology', era: 'medieval', prerequisites: ['writing', 'philosophy'], modules: [{name:'Comparative Belief Systems'},{name:'Rituals'},{name:'Ethics'},{name:'Community Structures'}], places: [{name:'Religious History Museum',type:'museum'},{name:'Historic Cathedral/Temple/Mosque',type:'historic-site'},{name:'Interfaith Center',type:'institution'}], partners: [{name:'Interfaith Council',type:'organization'},{name:'Religious Scholar',type:'professional'},{name:'Clergy Member',type:'professional'}], artifact: {description:'Comparative map with respectful debate', requirements:['Comparative map of belief systems','Respectful debate conducted']} },
+      { id: 'civil-service', name: 'Civil Service', era: 'medieval', prerequisites: ['code-of-laws', 'writing'], modules: [{name:'Bureaucracy'},{name:'Forms'},{name:'Incentives'},{name:'Audits'},{name:'Public Records'}], places: [{name:'City Hall',type:'institution'},{name:'Government Archives',type:'institution'},{name:'DMV/Post Office',type:'facility'}], partners: [{name:'Civic Organization',type:'organization'},{name:'Government Employee',type:'professional'},{name:'City Council Member',type:'professional'}], artifact: {description:'Run a micro-agency with intake, decisions, and logs', requirements:['Micro-agency operated','Intake process documented','Decisions recorded','Activity logs maintained']} },
+      { id: 'chivalry', name: 'Chivalry', era: 'medieval', prerequisites: ['horseback-riding', 'code-of-laws'], modules: [{name:'Honor Codes'},{name:'Responsibility'},{name:'Restraint'},{name:'Service'}], places: [{name:'Medieval Castle/Fortress',type:'historic-site'},{name:'Martial Arts Dojo',type:'facility'},{name:'Renaissance Faire',type:'facility'}], partners: [{name:'Martial Arts Club',type:'club'},{name:'Scouts',type:'organization'},{name:'Service Organization',type:'organization'}], artifact: {description:'Service project with code and reflection', requirements:['Service project completed','Personal code written','Reflection documented']} },
+      { id: 'guilds', name: 'Guilds', era: 'medieval', prerequisites: ['currency', 'education'], modules: [{name:'Apprenticeship'},{name:'Standards'},{name:'Peer Review'},{name:'Pricing'},{name:'Reputation'}], places: [{name:'Makerspace',type:'workspace'},{name:'Guild Hall (Historic)',type:'historic-site'},{name:'Trade School',type:'institution'}], partners: [{name:'Craft Guild',type:'guild'},{name:'Trade Association',type:'organization'},{name:'Master Craftsperson',type:'professional'}], artifact: {description:'Run a mini guild with peer certification', requirements:['Mini guild organized','Peer certification process established']} },
+
+      // Renaissance Era
+      { id: 'printing-press', name: 'Printing Press', era: 'renaissance', prerequisites: ['writing', 'machinery'], modules: [{name:'Typesetting/Printing'},{name:'Layout'},{name:'Editing'},{name:'Distribution'}], places: [{name:'Print Shop/Letterpress Studio',type:'studio'},{name:'Printing Museum',type:'museum'},{name:'School Fablab',type:'workspace'}], partners: [{name:'Printer/Letterpress Artist',type:'professional'},{name:'Publisher',type:'professional'},{name:'Graphic Designer',type:'professional'}], artifact: {description:'Printed newspaper or zine run with readership notes', requirements:['Newspaper or zine printed','Print run completed','Readership notes documented']} },
+      { id: 'banking', name: 'Banking', era: 'renaissance', prerequisites: ['currency', 'mathematics'], modules: [{name:'Loans'},{name:'Interest'},{name:'Risk'},{name:'Ledgers'},{name:'Fraud'}], places: [{name:'Bank (Tour)',type:'facility'},{name:'Financial History Museum',type:'museum'},{name:'Stock Exchange',type:'facility'}], partners: [{name:'Entrepreneur Mentor',type:'mentor'},{name:'Banker/Financial Advisor',type:'professional'},{name:'Accountant',type:'professional'}], artifact: {description:'Simulated bank with audits and defaults handling', requirements:['Simulated bank operated','Audits conducted','Defaults handling documented']} },
+      { id: 'gunpowder', name: 'Gunpowder', era: 'renaissance', prerequisites: ['iron-working'], modules: [{name:'History'},{name:'Chemistry Safety'},{name:'Pressure/Containment Theory'}], places: [{name:'Military History Museum',type:'museum'},{name:'Chemistry Lab',type:'facility'},{name:'Historic Fort/Battlefield',type:'historic-site'}], partners: [{name:'Chemistry Educator',type:'professional'},{name:'Historian',type:'professional'},{name:'Museum Curator',type:'professional'}], artifact: {description:'Safety report with historical analysis and pressure demos (safe)', requirements:['Safety report completed','Historical analysis written','Safe pressure demonstrations conducted']} },
+      { id: 'navigation', name: 'Navigation', era: 'renaissance', prerequisites: ['compass', 'astronomy', 'sailing'], modules: [{name:'Charts'},{name:'Dead Reckoning'},{name:'Basic Celestial'},{name:'Weather'}], places: [{name:'Maritime Museum',type:'museum'},{name:'Sailing Center',type:'facility'},{name:'Historic Port/Harbor',type:'historic-site'}], partners: [{name:'Sailing Club',type:'club'},{name:'Ship Captain',type:'professional'},{name:'Navigator',type:'professional'}], artifact: {description:'Planned route executed with error analysis', requirements:['Route planned','Route executed','Error analysis documented']} },
+      { id: 'cartography', name: 'Cartography', era: 'renaissance', prerequisites: ['mathematics', 'navigation'], modules: [{name:'Scale'},{name:'Projection Basics'},{name:'Symbols'},{name:'Surveying'}], places: [{name:'Map Library',type:'institution'},{name:'Geography Museum',type:'museum'},{name:'USGS/Survey Office',type:'institution'}], partners: [{name:'Mapping Group',type:'group'},{name:'Cartographer',type:'professional'},{name:'GIS Specialist',type:'professional'}], artifact: {description:'Local atlas map set', requirements:['Local atlas map set created']} },
+
+      // Industrial Era
+      { id: 'scientific-theory', name: 'Scientific Theory', era: 'industrial', prerequisites: ['mathematics', 'philosophy'], modules: [{name:'Controlled Experiments'},{name:'Replication'},{name:'Statistics Basics'}], places: [{name:'Science Museum',type:'museum'},{name:'University Lab',type:'institution'},{name:'Research Facility',type:'facility'}], partners: [{name:'Scientist',type:'professional'},{name:'Science Teacher',type:'professional'},{name:'Research Mentor',type:'mentor'}], artifact: {description:'Replicated experiment with writeup', requirements:['Experiment replicated','Writeup documenting methodology and results']} },
+      { id: 'steam-power', name: 'Steam Power', era: 'industrial', prerequisites: ['iron-working', 'scientific-theory'], modules: [{name:'Heat→Work'},{name:'Pressure Safety'},{name:'Engines Overview'}], places: [{name:'Railroad Museum',type:'museum'},{name:'Industrial Heritage Site',type:'historic-site'},{name:'Working Steam Engine Site',type:'facility'}], partners: [{name:'Steam Engineer',type:'professional'},{name:'Mechanical Engineer Mentor',type:'mentor'},{name:'Historical Society',type:'organization'}], artifact: {description:'Safe steam model or demo with efficiency notes', requirements:['Safe steam model or demonstration','Efficiency notes documented']} },
+      { id: 'railroad', name: 'Railroad', era: 'industrial', prerequisites: ['steam-power', 'iron-working'], modules: [{name:'Logistics'},{name:'Scheduling'},{name:'Routing'},{name:'Standard Gauges Concept'}], places: [{name:'Railroad Museum',type:'museum'},{name:'Train Station',type:'facility'},{name:'Historic Railroad',type:'historic-site'}], partners: [{name:'Railroad Enthusiast Club',type:'club'},{name:'Logistics Professional',type:'professional'},{name:'Transit Authority',type:'organization'}], artifact: {description:'Logistics plan with simulation results', requirements:['Logistics plan created','Simulation results documented']} },
+      { id: 'electricity', name: 'Electricity', era: 'industrial', prerequisites: ['scientific-theory'], modules: [{name:'Circuits'},{name:'Motors'},{name:'Generators'},{name:'Measurement'},{name:'Safety'}], places: [{name:'Electricity Museum',type:'museum'},{name:'Power Plant Tour',type:'facility'},{name:'Electronics Lab',type:'workspace'}], partners: [{name:'Electronics Club',type:'club'},{name:'Electrician',type:'professional'},{name:'Electrical Engineer',type:'professional'}], artifact: {description:'Powered device with measured output', requirements:['Powered device built','Output measured and documented']} },
+      { id: 'replaceable-parts', name: 'Replaceable Parts', era: 'industrial', prerequisites: ['machinery', 'scientific-theory'], modules: [{name:'Jigs'},{name:'Standards'},{name:'QA Sampling'},{name:'Tolerances'}], places: [{name:'Manufacturing Plant Tour',type:'facility'},{name:'Machine Shop',type:'workspace'},{name:'Industrial Museum',type:'museum'}], partners: [{name:'Machinist',type:'professional'},{name:'Quality Engineer',type:'professional'},{name:'Manufacturing Mentor',type:'mentor'}], artifact: {description:'20 identical parts with QA report', requirements:['20 identical parts manufactured','QA report documenting consistency']} },
+
+      // Modern Era
+      { id: 'radio', name: 'Radio', era: 'modern', prerequisites: ['electricity'], modules: [{name:'Signals'},{name:'Encoding'},{name:'Protocols'},{name:'Interference'}], places: [{name:'Ham Radio Station',type:'facility'},{name:'Communications Museum',type:'museum'},{name:'Radio Tower Site',type:'facility'}], partners: [{name:'Ham Radio Club',type:'club'},{name:'Radio Operator',type:'professional'},{name:'ARRL Mentor',type:'mentor'}], artifact: {description:'Reliable comms link with log', requirements:['Reliable communications link established','Communication log maintained']} },
+      { id: 'flight', name: 'Flight', era: 'modern', prerequisites: ['engineering', 'scientific-theory'], modules: [{name:'Lift/Drag'},{name:'Control Surfaces'},{name:'Safety'},{name:'Weather'}], places: [{name:'Aviation Museum',type:'museum'},{name:'Small Airport',type:'facility'},{name:'Glider Field',type:'outdoor'}], partners: [{name:'Glider Club',type:'club'},{name:'Drone Club',type:'club'},{name:'Pilot',type:'professional'},{name:'Flight Instructor',type:'professional'}], artifact: {description:'Stable controlled flight (model/glider) with tests', requirements:['Stable controlled flight achieved (model or glider)','Flight tests documented']} },
+      { id: 'combustion', name: 'Combustion', era: 'modern', prerequisites: ['steam-power', 'scientific-theory'], modules: [{name:'Engines'},{name:'Fuel/Air'},{name:'Efficiency'},{name:'Emissions'}], places: [{name:'Auto Museum',type:'museum'},{name:'Auto Shop',type:'workspace'},{name:'Vintage Car Show',type:'facility'}], partners: [{name:'Mechanic',type:'professional'},{name:'Automotive Engineer',type:'professional'},{name:'Car Club',type:'club'}], artifact: {description:'Engine teardown report with performance model', requirements:['Engine teardown report completed','Performance model created']} },
+      { id: 'plastics', name: 'Plastics', era: 'modern', prerequisites: ['scientific-theory'], modules: [{name:'Polymers'},{name:'Molding'},{name:'Material Tradeoffs'},{name:'Recycling'}], places: [{name:'Fablab',type:'workspace'},{name:'Plastics Museum',type:'museum'},{name:'Recycling Facility',type:'facility'}], partners: [{name:'Materials Scientist',type:'professional'},{name:'Industrial Designer',type:'professional'},{name:'Maker Mentor',type:'mentor'}], artifact: {description:'Molded part with stress tests', requirements:['Molded part created','Stress tests performed and documented']} },
+      { id: 'computers', name: 'Computers', era: 'modern', prerequisites: ['electricity', 'mathematics'], modules: [{name:'Logic'},{name:'Programming'},{name:'Storage'},{name:'Debugging'}], places: [{name:'Computer History Museum',type:'museum'},{name:'Hackerspace',type:'workspace'},{name:'University CS Lab',type:'institution'}], partners: [{name:'Coding Club',type:'club'},{name:'Software Developer',type:'professional'},{name:'CS Teacher',type:'professional'}], artifact: {description:'Working program with tests', requirements:['Working program created','Tests written and passing']} },
+      { id: 'internet', name: 'Internet', era: 'modern', prerequisites: ['computers', 'radio'], modules: [{name:'Client/Server'},{name:'HTTP'},{name:'Auth'},{name:'Databases'},{name:'Security Basics'}], places: [{name:'Data Center Tour',type:'facility'},{name:'Internet Archive',type:'institution'},{name:'Tech Company Visit',type:'facility'}], partners: [{name:'Web Developer',type:'professional'},{name:'DevOps Engineer',type:'professional'},{name:'Tech Mentor',type:'mentor'}], artifact: {description:'Deployed web app with uptime log', requirements:['Web app deployed','Uptime log maintained']} },
+      { id: 'robotics', name: 'Robotics', era: 'modern', prerequisites: ['computers', 'machinery', 'electricity'], modules: [{name:'Sensors'},{name:'Actuators'},{name:'Control Loops'},{name:'Mechanical Design'}], places: [{name:'Robotics Lab',type:'workspace'},{name:'Science Museum',type:'museum'},{name:'Manufacturing Facility',type:'facility'}], partners: [{name:'Robotics Club',type:'club'},{name:'Robotics Engineer',type:'professional'},{name:'FIRST Mentor',type:'mentor'}], artifact: {description:'Robot that performs task reliably', requirements:['Robot performs task reliably']} },
+
+      // Information Era
+      { id: 'machine-learning', name: 'Machine Learning', era: 'information', prerequisites: ['computers', 'scientific-theory'], modules: [{name:'Data'},{name:'Labels'},{name:'Evaluation'},{name:'Overfitting'},{name:'Embeddings'}], places: [{name:'AI Research Lab',type:'institution'},{name:'Tech Company',type:'facility'},{name:'University ML Lab',type:'institution'}], partners: [{name:'ML Engineer',type:'professional'},{name:'Data Scientist',type:'professional'},{name:'ML Mentor',type:'mentor'}], artifact: {description:'Model that improves metric with failure report', requirements:['Model improves target metric','Failure report documenting edge cases']} },
+      { id: 'ai-governance', name: 'AI Governance', era: 'information', prerequisites: ['machine-learning', 'code-of-laws'], modules: [{name:'Permissions'},{name:'Audit Logs'},{name:'Red-teaming'},{name:'Safety Policies'}], places: [{name:'AI Safety Organization',type:'institution'},{name:'Policy Institute',type:'institution'},{name:'Tech Ethics Center',type:'institution'}], partners: [{name:'Responsible AI Group',type:'group'},{name:'AI Policy Expert',type:'professional'},{name:'AI Safety Researcher',type:'professional'}], artifact: {description:'Tool-using agent with eval harness and safety constitution', requirements:['Tool-using agent built','Eval harness created','Safety constitution documented']} }
+    ];
+
+    // Build links from prerequisites
+    const links = [];
+    skills.forEach(skill => {
+      skill.prerequisites.forEach(prereq => {
+        links.push({ source: prereq, target: skill.id });
+      });
+    });
+
+    // Update stats
+    document.getElementById('stat-skills').textContent = skills.length;
+    document.getElementById('stat-links').textContent = links.length;
+
+    // Build era legend
+    const legendContainer = document.getElementById('era-legend');
+    eraOrder.forEach(era => {
+      const item = document.createElement('div');
+      item.className = 'era-item';
+      item.innerHTML = `<div class="era-dot" style="background: ${eraColors[era]}"></div><span>${eraNames[era]}</span>`;
+      legendContainer.appendChild(item);
+    });
+
+    // D3 visualization
+    const container = document.getElementById('tech-tree');
+    const width = container.clientWidth - 350;
+    const height = container.clientHeight;
+
+    const svg = d3.select('#tech-tree')
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height);
+
+    // Create zoom behavior
+    const zoom = d3.zoom()
+      .scaleExtent([0.3, 3])
+      .on('zoom', (event) => {
+        g.attr('transform', event.transform);
+      });
+
+    svg.call(zoom);
+
+    const g = svg.append('g');
+
+    // Arrow marker for links
+    svg.append('defs').append('marker')
+      .attr('id', 'arrowhead')
+      .attr('viewBox', '-0 -5 10 10')
+      .attr('refX', 20)
+      .attr('refY', 0)
+      .attr('orient', 'auto')
+      .attr('markerWidth', 6)
+      .attr('markerHeight', 6)
+      .append('path')
+      .attr('d', 'M 0,-5 L 10,0 L 0,5')
+      .attr('fill', 'rgba(255,255,255,0.3)');
+
+    // Create node map for links
+    const nodeMap = new Map(skills.map(s => [s.id, s]));
+
+    // Calculate positions based on era columns
+    let useForceLayout = true;
+
+    function getGridPositions() {
+      const eraWidth = width / (eraOrder.length + 1);
+      const positions = {};
+
+      eraOrder.forEach((era, eraIdx) => {
+        const eraSkills = skills.filter(s => s.era === era);
+        const eraHeight = height / (eraSkills.length + 1);
+
+        eraSkills.forEach((skill, idx) => {
+          positions[skill.id] = {
+            x: (eraIdx + 1) * eraWidth,
+            y: (idx + 1) * eraHeight
+          };
+        });
+      });
+
+      return positions;
+    }
+
+    // Force simulation
+    const simulation = d3.forceSimulation(skills)
+      .force('link', d3.forceLink(links).id(d => d.id).distance(100).strength(0.5))
+      .force('charge', d3.forceManyBody().strength(-300))
+      .force('x', d3.forceX(d => (eraOrder.indexOf(d.era) + 1) * (width / 8)).strength(0.3))
+      .force('y', d3.forceY(height / 2).strength(0.1))
+      .force('collision', d3.forceCollide().radius(40));
+
+    // Create links
+    const link = g.append('g')
+      .selectAll('line')
+      .data(links)
+      .enter()
+      .append('line')
+      .attr('class', 'link')
+      .attr('marker-end', 'url(#arrowhead)');
+
+    // Create nodes
+    const node = g.append('g')
+      .selectAll('.node')
+      .data(skills)
+      .enter()
+      .append('g')
+      .attr('class', 'node')
+      .call(d3.drag()
+        .on('start', dragstarted)
+        .on('drag', dragged)
+        .on('end', dragended));
+
+    node.append('circle')
+      .attr('r', 18)
+      .attr('fill', d => eraColors[d.era])
+      .attr('stroke', d => d3.color(eraColors[d.era]).brighter(0.5));
+
+    node.append('text')
+      .attr('dy', 35)
+      .text(d => d.name.length > 12 ? d.name.substring(0, 10) + '...' : d.name);
+
+    // Click handler for nodes
+    let selectedNode = null;
+
+    node.on('click', (event, d) => {
+      event.stopPropagation();
+
+      // Update selection
+      node.classed('selected', n => n.id === d.id);
+      selectedNode = d;
+
+      // Highlight connected links
+      link.classed('highlighted', l => l.source.id === d.id || l.target.id === d.id);
+
+      // Show details
+      showSkillDetails(d);
+    });
+
+    // Click on background to deselect
+    svg.on('click', () => {
+      node.classed('selected', false);
+      link.classed('highlighted', false);
+      selectedNode = null;
+      showEmptyState();
+    });
+
+    // Simulation tick
+    simulation.on('tick', () => {
+      link
+        .attr('x1', d => d.source.x)
+        .attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x)
+        .attr('y2', d => d.target.y);
+
+      node.attr('transform', d => `translate(${d.x},${d.y})`);
+    });
+
+    // Drag functions
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
+
+    function dragged(event, d) {
+      d.fx = event.x;
+      d.fy = event.y;
+    }
+
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
+
+    // UI Functions
+    function resetZoom() {
+      svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity);
+    }
+
+    function toggleLayout() {
+      useForceLayout = !useForceLayout;
+
+      if (useForceLayout) {
+        simulation.alpha(1).restart();
+      } else {
+        simulation.stop();
+        const positions = getGridPositions();
+
+        node.transition().duration(500)
+          .attr('transform', d => {
+            const pos = positions[d.id];
+            d.x = pos.x;
+            d.y = pos.y;
+            return `translate(${pos.x},${pos.y})`;
+          });
+
+        link.transition().duration(500)
+          .attr('x1', d => positions[d.source.id].x)
+          .attr('y1', d => positions[d.source.id].y)
+          .attr('x2', d => positions[d.target.id].x)
+          .attr('y2', d => positions[d.target.id].y);
+      }
+    }
+
+    function showEmptyState() {
+      document.getElementById('skill-details').innerHTML = `
+        <div class="empty-state">
+          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+          <p>Click on a skill node to view details</p>
+        </div>
+      `;
+    }
+
+    function showSkillDetails(skill) {
+      const html = `
+        <div class="panel-header">
+          <div class="skill-name">${skill.name}</div>
+          <div class="skill-era" style="color: ${eraColors[skill.era]}">${eraNames[skill.era]}</div>
+        </div>
+
+        ${skill.prerequisites.length > 0 ? `
+          <div class="section">
+            <div class="section-title">Prerequisites</div>
+            <div class="prerequisites">
+              ${skill.prerequisites.map(p => {
+                const prereq = nodeMap.get(p);
+                return `<span class="prereq-tag" onclick="selectSkill('${p}')" style="border-color: ${eraColors[prereq.era]}">${prereq.name}</span>`;
+              }).join('')}
+            </div>
+          </div>
+        ` : ''}
+
+        <div class="section">
+          <div class="section-title">Modules (${skill.modules.length})</div>
+          <ul class="module-list">
+            ${skill.modules.map(m => `<li>${m.name}</li>`).join('')}
+          </ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Places to Visit (${skill.places.length})</div>
+          <ul class="place-list">
+            ${skill.places.map(p => `<li>${p.name}<span class="item-type">${p.type}</span></li>`).join('')}
+          </ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Partners & Mentors (${skill.partners.length})</div>
+          <ul class="partner-list">
+            ${skill.partners.map(p => `<li>${p.name}<span class="item-type">${p.type}</span></li>`).join('')}
+          </ul>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Artifact</div>
+          <div class="artifact-box">
+            <div class="artifact-desc">${skill.artifact.description}</div>
+            <ul class="requirement-list">
+              ${skill.artifact.requirements.map(r => `<li>${r}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('skill-details').innerHTML = html;
+    }
+
+    // Global function for clicking prereq tags
+    window.selectSkill = function(skillId) {
+      const skill = skills.find(s => s.id === skillId);
+      if (skill) {
+        node.classed('selected', n => n.id === skillId);
+        link.classed('highlighted', l => l.source.id === skillId || l.target.id === skillId);
+        showSkillDetails(skill);
+
+        // Pan to node
+        const nodeData = skills.find(s => s.id === skillId);
+        if (nodeData) {
+          svg.transition().duration(500).call(
+            zoom.transform,
+            d3.zoomIdentity.translate(width/2 - nodeData.x, height/2 - nodeData.y)
+          );
+        }
+      }
+    };
+
+    // Initial zoom to fit
+    setTimeout(() => {
+      const bounds = g.node().getBBox();
+      const fullWidth = bounds.width;
+      const fullHeight = bounds.height;
+      const midX = bounds.x + fullWidth / 2;
+      const midY = bounds.y + fullHeight / 2;
+      const scale = 0.8 / Math.max(fullWidth / width, fullHeight / height);
+      const translate = [width / 2 - scale * midX, height / 2 - scale * midY];
+
+      svg.transition().duration(750).call(
+        zoom.transform,
+        d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)
+      );
+    }, 1000);
+  </script>
+</body>
+</html>

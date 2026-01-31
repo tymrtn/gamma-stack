@@ -37,11 +37,19 @@ export interface Module {
 }
 
 /**
- * A community partner for hands-on learning
+ * A place to visit for hands-on learning
+ */
+export interface Place {
+  name: string;
+  type: 'museum' | 'historic-site' | 'studio' | 'facility' | 'outdoor' | 'institution' | 'workspace';
+}
+
+/**
+ * A community partner or mentor for skill development
  */
 export interface Partner {
   name: string;
-  type?: string;
+  type: 'mentor' | 'club' | 'guild' | 'organization' | 'professional' | 'group';
 }
 
 /**
@@ -59,7 +67,9 @@ export interface Skill {
   id: string;
   name: string;
   era: EraId;
+  prerequisites: string[];
   modules: Module[];
+  places: Place[];
   partners: Partner[];
   artifact: Artifact;
 }
@@ -70,6 +80,26 @@ export interface Skill {
 export interface Curriculum {
   eras: Era[];
   skills: Skill[];
+}
+
+/**
+ * Tech tree node for D3 visualization
+ */
+export interface TechTreeNode {
+  id: string;
+  name: string;
+  era: EraId;
+  eraOrder: number;
+  x?: number;
+  y?: number;
+}
+
+/**
+ * Tech tree link for D3 visualization
+ */
+export interface TechTreeLink {
+  source: string;
+  target: string;
 }
 
 /**
