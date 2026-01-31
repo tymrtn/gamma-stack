@@ -1,0 +1,22 @@
+{
+  "name": "gamma-stack-historical-skills-curriculum",
+  "version": "1.0.0",
+  "description": "Historical skills curriculum spanning from Ancient Era to Information Era",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "curriculum",
+    "education",
+    "skills",
+    "historical",
+    "learning"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  }
+}
