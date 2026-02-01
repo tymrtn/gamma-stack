@@ -61,6 +61,53 @@ export interface Artifact {
 }
 
 /**
+ * A building/capability unlocked by mastering a skill
+ * In Civ terms: what you can build after researching a tech
+ * In real terms: what capability or project you can now undertake
+ */
+export interface Building {
+  id: string;
+  name: string;
+  description: string;
+  type: 'structure' | 'system' | 'capability' | 'certification';
+}
+
+/**
+ * A unit/role unlocked by mastering a skill
+ * In Civ terms: what units you can train after researching a tech
+ * In real terms: what roles or activities you can now perform
+ */
+export interface Unit {
+  id: string;
+  name: string;
+  description: string;
+  type: 'role' | 'activity' | 'certification' | 'capability';
+}
+
+/**
+ * What gets unlocked when a skill is mastered
+ */
+export interface Unlocks {
+  buildings: Building[];
+  units: Unit[];
+}
+
+/**
+ * A Wonder - special achievement tied to visiting iconic locations
+ */
+export interface Wonder {
+  id: string;
+  name: string;
+  location: string;
+  country: string;
+  coordinates?: { lat: number; lng: number };
+  description: string;
+  relatedSkills: string[];
+  challenge: string;
+  era: EraId;
+}
+
+/**
  * A complete skill definition with all learning components
  */
 export interface Skill {
@@ -72,14 +119,16 @@ export interface Skill {
   places: Place[];
   partners: Partner[];
   artifact: Artifact;
+  unlocks: Unlocks;
 }
 
 /**
- * Complete curriculum containing all eras and skills
+ * Complete curriculum containing all eras, skills, and wonders
  */
 export interface Curriculum {
   eras: Era[];
   skills: Skill[];
+  wonders: Wonder[];
 }
 
 /**

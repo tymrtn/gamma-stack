@@ -31,6 +31,15 @@ export const ancientSkills: Skill[] = [
         '3-iteration log documenting improvements',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'granary', name: 'Granary', description: 'Store food and grain in ceramic vessels', type: 'structure' },
+        { id: 'kiln', name: 'Kiln', description: 'Fire ceramics and prepare materials', type: 'structure' },
+      ],
+      units: [
+        { id: 'potter', name: 'Potter', description: 'Create ceramic goods for trade and use', type: 'role' },
+      ],
+    },
   },
   {
     id: 'animal-husbandry',
@@ -59,6 +68,16 @@ export const ancientSkills: Skill[] = [
       requirements: [
         '30-day care log',
         'Cost plan for ongoing care',
+      ],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'pasture', name: 'Pasture', description: 'Raise livestock for food and materials', type: 'structure' },
+        { id: 'stable', name: 'Stable', description: 'House and care for working animals', type: 'structure' },
+      ],
+      units: [
+        { id: 'shepherd', name: 'Shepherd', description: 'Tend and manage livestock herds', type: 'role' },
+        { id: 'scout', name: 'Scout', description: 'Explore terrain with animal companions', type: 'role' },
       ],
     },
   },
@@ -92,6 +111,15 @@ export const ancientSkills: Skill[] = [
         'Yield log documenting growth',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'farm', name: 'Farm', description: 'Produce food from cultivated crops', type: 'structure' },
+        { id: 'irrigation', name: 'Irrigation System', description: 'Deliver water to crops efficiently', type: 'system' },
+      ],
+      units: [
+        { id: 'farmer', name: 'Farmer', description: 'Cultivate land and produce food', type: 'role' },
+      ],
+    },
   },
   {
     id: 'mining',
@@ -118,6 +146,15 @@ export const ancientSkills: Skill[] = [
       requirements: [
         'Labeled collection of samples',
         '"From rock to metal" process map',
+      ],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'mine', name: 'Mine', description: 'Extract ore and minerals from the earth', type: 'structure' },
+        { id: 'quarry', name: 'Quarry', description: 'Extract stone for construction', type: 'structure' },
+      ],
+      units: [
+        { id: 'miner', name: 'Miner', description: 'Extract valuable materials from the ground', type: 'role' },
       ],
     },
   },
@@ -149,6 +186,16 @@ export const ancientSkills: Skill[] = [
         'Passes load test',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'walls', name: 'Walls', description: 'Defensive stone walls for protection', type: 'structure' },
+        { id: 'monument', name: 'Monument', description: 'Permanent stone structures for commemoration', type: 'structure' },
+        { id: 'pyramid', name: 'Pyramid', description: 'Monumental stone structures (Wonder prerequisite)', type: 'structure' },
+      ],
+      units: [
+        { id: 'mason', name: 'Mason', description: 'Build lasting stone structures', type: 'role' },
+      ],
+    },
   },
   {
     id: 'archery',
@@ -176,6 +223,15 @@ export const ancientSkills: Skill[] = [
         'Safety certification earned',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'archery-range', name: 'Archery Range', description: 'Train and practice ranged combat', type: 'structure' },
+      ],
+      units: [
+        { id: 'archer', name: 'Archer', description: 'Skilled ranged combatant', type: 'role' },
+        { id: 'hunter', name: 'Hunter', description: 'Hunt game with bow and arrow', type: 'role' },
+      ],
+    },
   },
   {
     id: 'the-wheel',
@@ -201,6 +257,16 @@ export const ancientSkills: Skill[] = [
       description: 'Cart that moves load reliably',
       requirements: [
         'Cart moves load reliably',
+      ],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'road', name: 'Road', description: 'Paved routes for wheeled transport', type: 'structure' },
+        { id: 'water-wheel', name: 'Water Wheel', description: 'Harness water power for work', type: 'structure' },
+      ],
+      units: [
+        { id: 'chariot', name: 'Chariot', description: 'Fast wheeled transport and combat vehicle', type: 'capability' },
+        { id: 'cart-driver', name: 'Cart Driver', description: 'Transport goods by wheeled vehicle', type: 'role' },
       ],
     },
   },
@@ -233,6 +299,16 @@ export const ancientSkills: Skill[] = [
         'Basic maneuvers demonstrated',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'harbor', name: 'Harbor', description: 'Port facility for ships', type: 'structure' },
+        { id: 'lighthouse', name: 'Lighthouse', description: 'Navigation aid for coastal waters', type: 'structure' },
+      ],
+      units: [
+        { id: 'galley', name: 'Galley', description: 'Basic sailing vessel for coastal travel', type: 'capability' },
+        { id: 'sailor', name: 'Sailor', description: 'Crew member skilled in ship operation', type: 'role' },
+      ],
+    },
   },
   {
     id: 'writing',
@@ -260,6 +336,16 @@ export const ancientSkills: Skill[] = [
       requirements: [
         'Readable ledger created',
         '30-day records maintained',
+      ],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'library', name: 'Library', description: 'Store and preserve written knowledge', type: 'structure' },
+        { id: 'archive', name: 'Archive', description: 'Maintain historical records', type: 'structure' },
+      ],
+      units: [
+        { id: 'scribe', name: 'Scribe', description: 'Record and copy important documents', type: 'role' },
+        { id: 'messenger', name: 'Messenger', description: 'Carry written communications', type: 'role' },
       ],
     },
   },
@@ -290,6 +376,15 @@ export const ancientSkills: Skill[] = [
         'Observation log maintained',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'sundial', name: 'Sundial', description: 'Track time using solar shadows', type: 'structure' },
+        { id: 'observatory-basic', name: 'Observatory', description: 'Observe celestial events', type: 'structure' },
+      ],
+      units: [
+        { id: 'astronomer-role', name: 'Astronomer', description: 'Study and predict celestial events', type: 'role' },
+      ],
+    },
   },
   {
     id: 'bronze-working',
@@ -318,6 +413,16 @@ export const ancientSkills: Skill[] = [
         'Test notes documenting hardness and quality',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'foundry', name: 'Foundry', description: 'Smelt and cast metal objects', type: 'structure' },
+        { id: 'armory', name: 'Armory', description: 'Produce bronze weapons and armor', type: 'structure' },
+      ],
+      units: [
+        { id: 'spearman', name: 'Spearman', description: 'Warrior equipped with bronze weapons', type: 'role' },
+        { id: 'metalsmith', name: 'Metalsmith', description: 'Craft bronze tools and objects', type: 'role' },
+      ],
+    },
   },
   {
     id: 'iron-working',
@@ -343,6 +448,16 @@ export const ancientSkills: Skill[] = [
       requirements: [
         'Forged iron tool created',
         'Hardness comparison documented',
+      ],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'forge', name: 'Forge', description: 'Work iron into tools and weapons', type: 'structure' },
+        { id: 'blacksmith-shop', name: 'Blacksmith Shop', description: 'Produce iron goods for the community', type: 'structure' },
+      ],
+      units: [
+        { id: 'swordsman', name: 'Swordsman', description: 'Warrior with iron sword and armor', type: 'role' },
+        { id: 'blacksmith-role', name: 'Blacksmith', description: 'Master of iron forging', type: 'role' },
       ],
     },
   },

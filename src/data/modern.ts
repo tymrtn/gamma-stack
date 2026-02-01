@@ -24,9 +24,16 @@ export const modernSkills: Skill[] = [
     ],
     artifact: {
       description: 'Reliable comms link with log',
-      requirements: [
-        'Reliable communications link established',
-        'Communication log maintained',
+      requirements: ['Reliable communications link established', 'Communication log maintained'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'radio-station', name: 'Radio Station', description: 'Broadcast communications', type: 'structure' },
+        { id: 'comms-tower', name: 'Communications Tower', description: 'Extend radio range', type: 'structure' },
+      ],
+      units: [
+        { id: 'radio-operator', name: 'Radio Operator', description: 'Transmit and receive communications', type: 'role' },
+        { id: 'ham-license', name: 'Amateur Radio License', description: 'Certified radio operator', type: 'certification' },
       ],
     },
   },
@@ -54,9 +61,18 @@ export const modernSkills: Skill[] = [
     ],
     artifact: {
       description: 'Stable controlled flight (model/glider) with tests',
-      requirements: [
-        'Stable controlled flight achieved (model or glider)',
-        'Flight tests documented',
+      requirements: ['Stable controlled flight achieved (model or glider)', 'Flight tests documented'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'airport', name: 'Airport', description: 'Hub for air travel', type: 'structure' },
+        { id: 'hangar', name: 'Hangar', description: 'Store and maintain aircraft', type: 'structure' },
+        { id: 'aerodrome', name: 'Aerodrome', description: 'Test and launch aircraft', type: 'structure' },
+      ],
+      units: [
+        { id: 'pilot', name: 'Pilot', description: 'Fly aircraft', type: 'role' },
+        { id: 'aircraft', name: 'Aircraft', description: 'Flying machine', type: 'capability' },
+        { id: 'drone-operator', name: 'Drone Operator', description: 'Control unmanned aerial vehicles', type: 'role' },
       ],
     },
   },
@@ -83,9 +99,18 @@ export const modernSkills: Skill[] = [
     ],
     artifact: {
       description: 'Engine teardown report with performance model',
-      requirements: [
-        'Engine teardown report completed',
-        'Performance model created',
+      requirements: ['Engine teardown report completed', 'Performance model created'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'garage', name: 'Garage', description: 'Maintain and repair vehicles', type: 'structure' },
+        { id: 'auto-plant', name: 'Automobile Plant', description: 'Manufacture vehicles', type: 'structure' },
+        { id: 'gas-station', name: 'Gas Station', description: 'Fuel distribution', type: 'structure' },
+      ],
+      units: [
+        { id: 'mechanic', name: 'Mechanic', description: 'Repair and maintain engines', type: 'role' },
+        { id: 'automobile', name: 'Automobile', description: 'Self-powered vehicle', type: 'capability' },
+        { id: 'tank', name: 'Tank', description: 'Armored combat vehicle', type: 'capability' },
       ],
     },
   },
@@ -112,9 +137,16 @@ export const modernSkills: Skill[] = [
     ],
     artifact: {
       description: 'Molded part with stress tests',
-      requirements: [
-        'Molded part created',
-        'Stress tests performed and documented',
+      requirements: ['Molded part created', 'Stress tests performed and documented'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'plastics-factory', name: 'Plastics Factory', description: 'Produce plastic goods', type: 'structure' },
+        { id: 'recycling-center', name: 'Recycling Center', description: 'Process recyclable materials', type: 'structure' },
+      ],
+      units: [
+        { id: 'materials-engineer', name: 'Materials Engineer', description: 'Develop new materials', type: 'role' },
+        { id: 'product-designer', name: 'Product Designer', description: 'Design consumer products', type: 'role' },
       ],
     },
   },
@@ -141,9 +173,17 @@ export const modernSkills: Skill[] = [
     ],
     artifact: {
       description: 'Working program with tests',
-      requirements: [
-        'Working program created',
-        'Tests written and passing',
+      requirements: ['Working program created', 'Tests written and passing'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'computer-lab', name: 'Computer Lab', description: 'Compute and process data', type: 'structure' },
+        { id: 'data-center', name: 'Data Center', description: 'Store and process large amounts of data', type: 'structure' },
+      ],
+      units: [
+        { id: 'programmer', name: 'Programmer', description: 'Write software', type: 'role' },
+        { id: 'computer-scientist', name: 'Computer Scientist', description: 'Research computing', type: 'role' },
+        { id: 'it-specialist', name: 'IT Specialist', description: 'Maintain computer systems', type: 'role' },
       ],
     },
   },
@@ -171,9 +211,18 @@ export const modernSkills: Skill[] = [
     ],
     artifact: {
       description: 'Deployed web app with uptime log',
-      requirements: [
-        'Web app deployed',
-        'Uptime log maintained',
+      requirements: ['Web app deployed', 'Uptime log maintained'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'server-farm', name: 'Server Farm', description: 'Host internet services', type: 'structure' },
+        { id: 'isp', name: 'Internet Service Provider', description: 'Provide internet access', type: 'structure' },
+        { id: 'startup-incubator', name: 'Startup Incubator', description: 'Launch internet businesses', type: 'structure' },
+      ],
+      units: [
+        { id: 'web-developer', name: 'Web Developer', description: 'Build websites and apps', type: 'role' },
+        { id: 'sysadmin', name: 'System Administrator', description: 'Manage servers and networks', type: 'role' },
+        { id: 'security-analyst', name: 'Security Analyst', description: 'Protect digital systems', type: 'role' },
       ],
     },
   },
@@ -200,8 +249,17 @@ export const modernSkills: Skill[] = [
     ],
     artifact: {
       description: 'Robot that performs task reliably',
-      requirements: [
-        'Robot performs task reliably',
+      requirements: ['Robot performs task reliably'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'robotics-lab', name: 'Robotics Lab', description: 'Develop robotic systems', type: 'structure' },
+        { id: 'automated-factory', name: 'Automated Factory', description: 'Robot-driven manufacturing', type: 'structure' },
+      ],
+      units: [
+        { id: 'robotics-engineer', name: 'Robotics Engineer', description: 'Design and build robots', type: 'role' },
+        { id: 'robot', name: 'Robot', description: 'Autonomous machine', type: 'capability' },
+        { id: 'drone', name: 'Drone', description: 'Autonomous flying machine', type: 'capability' },
       ],
     },
   },

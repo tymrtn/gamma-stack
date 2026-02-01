@@ -30,6 +30,17 @@ export const informationSkills: Skill[] = [
         'Failure report documenting edge cases',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'ml-lab', name: 'ML Laboratory', description: 'Train and deploy machine learning models', type: 'structure' },
+        { id: 'gpu-cluster', name: 'GPU Cluster', description: 'Compute infrastructure for AI training', type: 'structure' },
+      ],
+      units: [
+        { id: 'ml-engineer', name: 'ML Engineer', description: 'Build machine learning systems', type: 'role' },
+        { id: 'data-scientist', name: 'Data Scientist', description: 'Analyze data and build models', type: 'role' },
+        { id: 'ai-agent', name: 'AI Agent', description: 'Autonomous intelligent system', type: 'capability' },
+      ],
+    },
   },
   {
     id: 'ai-governance',
@@ -58,6 +69,17 @@ export const informationSkills: Skill[] = [
         'Tool-using agent built',
         'Eval harness created',
         'Safety constitution documented',
+      ],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'ai-safety-lab', name: 'AI Safety Lab', description: 'Test and validate AI systems', type: 'structure' },
+        { id: 'ethics-board', name: 'Ethics Board', description: 'Oversee responsible AI development', type: 'structure' },
+      ],
+      units: [
+        { id: 'ai-safety-researcher', name: 'AI Safety Researcher', description: 'Ensure AI systems are safe', type: 'role' },
+        { id: 'ai-auditor', name: 'AI Auditor', description: 'Verify AI compliance and safety', type: 'certification' },
+        { id: 'safe-ai-agent', name: 'Safe AI Agent', description: 'Governed autonomous system', type: 'capability' },
       ],
     },
   },

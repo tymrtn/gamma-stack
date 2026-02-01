@@ -1,4 +1,4 @@
-import { Curriculum, Skill, Era, EraId } from '../types';
+import { Curriculum, Skill, Era, EraId, Wonder } from '../types';
 import { eras } from './eras';
 import { ancientSkills } from './ancient';
 import { classicalSkills } from './classical';
@@ -7,6 +7,7 @@ import { renaissanceSkills } from './renaissance';
 import { industrialSkills } from './industrial';
 import { modernSkills } from './modern';
 import { informationSkills } from './information';
+import { wonders } from './wonders';
 
 /**
  * All skills from all eras combined
@@ -22,11 +23,12 @@ export const allSkills: Skill[] = [
 ];
 
 /**
- * Complete curriculum with all eras and skills
+ * Complete curriculum with all eras, skills, and wonders
  */
 export const curriculum: Curriculum = {
   eras,
   skills: allSkills,
+  wonders,
 };
 
 /**
@@ -121,6 +123,34 @@ export function canUnlockSkill(skillId: string, completedSkills: string[]): bool
   return skill.prerequisites.every((prereq) => completedSkills.includes(prereq));
 }
 
+/**
+ * Get all wonders
+ */
+export function getAllWonders(): Wonder[] {
+  return wonders;
+}
+
+/**
+ * Get wonders by era
+ */
+export function getWondersByEra(era: EraId): Wonder[] {
+  return wonders.filter((w) => w.era === era);
+}
+
+/**
+ * Get wonders related to a specific skill
+ */
+export function getWondersForSkill(skillId: string): Wonder[] {
+  return wonders.filter((w) => w.relatedSkills.includes(skillId));
+}
+
+/**
+ * Get a wonder by ID
+ */
+export function getWonderById(id: string): Wonder | undefined {
+  return wonders.find((w) => w.id === id);
+}
+
 // Re-export era-specific skills for direct access
 export { eras } from './eras';
 export { ancientSkills } from './ancient';
@@ -130,3 +160,4 @@ export { renaissanceSkills } from './renaissance';
 export { industrialSkills } from './industrial';
 export { modernSkills } from './modern';
 export { informationSkills } from './information';
+export { wonders } from './wonders';

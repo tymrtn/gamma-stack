@@ -24,10 +24,17 @@ export const renaissanceSkills: Skill[] = [
     ],
     artifact: {
       description: 'Printed newspaper or zine run with readership notes',
-      requirements: [
-        'Newspaper or zine printed',
-        'Print run completed',
-        'Readership notes documented',
+      requirements: ['Newspaper or zine printed', 'Print run completed', 'Readership notes documented'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'printing-house', name: 'Printing House', description: 'Mass produce books and documents', type: 'structure' },
+        { id: 'newspaper', name: 'Newspaper Office', description: 'Publish news and information', type: 'structure' },
+      ],
+      units: [
+        { id: 'printer', name: 'Printer', description: 'Operate printing press', type: 'role' },
+        { id: 'journalist', name: 'Journalist', description: 'Report and publish news', type: 'role' },
+        { id: 'publisher', name: 'Publisher', description: 'Produce and distribute publications', type: 'role' },
       ],
     },
   },
@@ -55,10 +62,18 @@ export const renaissanceSkills: Skill[] = [
     ],
     artifact: {
       description: 'Simulated bank with audits and defaults handling',
-      requirements: [
-        'Simulated bank operated',
-        'Audits conducted',
-        'Defaults handling documented',
+      requirements: ['Simulated bank operated', 'Audits conducted', 'Defaults handling documented'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'bank', name: 'Bank', description: 'Provide loans and financial services', type: 'structure' },
+        { id: 'stock-exchange', name: 'Stock Exchange', description: 'Trade shares and investments', type: 'structure' },
+        { id: 'insurance-office', name: 'Insurance Office', description: 'Manage risk through insurance', type: 'structure' },
+      ],
+      units: [
+        { id: 'banker', name: 'Banker', description: 'Manage money and loans', type: 'role' },
+        { id: 'accountant', name: 'Accountant', description: 'Track and audit finances', type: 'role' },
+        { id: 'investor', name: 'Investor', description: 'Fund ventures for profit', type: 'role' },
       ],
     },
   },
@@ -84,10 +99,17 @@ export const renaissanceSkills: Skill[] = [
     ],
     artifact: {
       description: 'Safety report with historical analysis and pressure demos (safe)',
-      requirements: [
-        'Safety report completed',
-        'Historical analysis written',
-        'Safe pressure demonstrations conducted',
+      requirements: ['Safety report completed', 'Historical analysis written', 'Safe pressure demonstrations conducted'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'arsenal', name: 'Arsenal', description: 'Store and produce weapons', type: 'structure' },
+        { id: 'fortress', name: 'Fortress', description: 'Gunpowder-era fortification', type: 'structure' },
+      ],
+      units: [
+        { id: 'musketeer', name: 'Musketeer', description: 'Soldier with firearm', type: 'role' },
+        { id: 'artillerist', name: 'Artillerist', description: 'Operate cannon and artillery', type: 'role' },
+        { id: 'chemist', name: 'Chemist', description: 'Understand chemical processes', type: 'role' },
       ],
     },
   },
@@ -114,10 +136,17 @@ export const renaissanceSkills: Skill[] = [
     ],
     artifact: {
       description: 'Planned route executed with error analysis',
-      requirements: [
-        'Route planned',
-        'Route executed',
-        'Error analysis documented',
+      requirements: ['Route planned', 'Route executed', 'Error analysis documented'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'shipyard', name: 'Shipyard', description: 'Build ocean-going vessels', type: 'structure' },
+        { id: 'trading-post', name: 'Trading Post', description: 'Establish distant trade connections', type: 'structure' },
+      ],
+      units: [
+        { id: 'ship-captain', name: 'Ship Captain', description: 'Command ocean voyages', type: 'role' },
+        { id: 'caravel', name: 'Caravel', description: 'Ocean-going exploration vessel', type: 'capability' },
+        { id: 'galleon', name: 'Galleon', description: 'Large trading/warship', type: 'capability' },
       ],
     },
   },
@@ -144,8 +173,16 @@ export const renaissanceSkills: Skill[] = [
     ],
     artifact: {
       description: 'Local atlas map set',
-      requirements: [
-        'Local atlas map set created',
+      requirements: ['Local atlas map set created'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'map-archive', name: 'Map Archive', description: 'Store and produce maps', type: 'structure' },
+        { id: 'geographic-society', name: 'Geographic Society', description: 'Advance exploration and mapping', type: 'structure' },
+      ],
+      units: [
+        { id: 'cartographer', name: 'Cartographer', description: 'Create accurate maps', type: 'role' },
+        { id: 'expedition', name: 'Expedition', description: 'Map uncharted territories', type: 'capability' },
       ],
     },
   },

@@ -29,6 +29,16 @@ export const classicalSkills: Skill[] = [
         'Tolerances report documenting accuracy',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'academy', name: 'Academy', description: 'Center for mathematical learning and research', type: 'structure' },
+        { id: 'surveying-office', name: 'Surveying Office', description: 'Accurate land measurement and mapping', type: 'structure' },
+      ],
+      units: [
+        { id: 'mathematician', name: 'Mathematician', description: 'Solve complex problems with precision', type: 'role' },
+        { id: 'surveyor', name: 'Surveyor', description: 'Measure and map land accurately', type: 'role' },
+      ],
+    },
   },
   {
     id: 'construction',
@@ -58,6 +68,17 @@ export const classicalSkills: Skill[] = [
         'Holds defined load safely',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'arena', name: 'Arena', description: 'Large venue for events and competitions', type: 'structure' },
+        { id: 'aqueduct', name: 'Aqueduct', description: 'Water transport infrastructure', type: 'structure' },
+        { id: 'colosseum', name: 'Colosseum', description: 'Massive amphitheater (Wonder prerequisite)', type: 'structure' },
+      ],
+      units: [
+        { id: 'builder', name: 'Builder', description: 'Construct complex structures', type: 'role' },
+        { id: 'architect', name: 'Architect', description: 'Design buildings and infrastructure', type: 'role' },
+      ],
+    },
   },
   {
     id: 'engineering',
@@ -83,6 +104,16 @@ export const classicalSkills: Skill[] = [
       description: 'Machine that does measurable work',
       requirements: [
         'Machine performs measurable work',
+      ],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'workshop', name: 'Workshop', description: 'Build and repair mechanical devices', type: 'structure' },
+        { id: 'siege-works', name: 'Siege Works', description: 'Construct siege equipment', type: 'structure' },
+      ],
+      units: [
+        { id: 'engineer', name: 'Engineer', description: 'Design and build machines', type: 'role' },
+        { id: 'catapult', name: 'Catapult Operator', description: 'Operate siege engines', type: 'capability' },
       ],
     },
   },
@@ -112,6 +143,16 @@ export const classicalSkills: Skill[] = [
       requirements: [
         'Working token system created',
         'Market day conducted successfully',
+      ],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'market', name: 'Market', description: 'Trade goods and services', type: 'structure' },
+        { id: 'mint', name: 'Mint', description: 'Produce currency', type: 'structure' },
+      ],
+      units: [
+        { id: 'merchant', name: 'Merchant', description: 'Trade goods for profit', type: 'role' },
+        { id: 'trader', name: 'Trader', description: 'Conduct long-distance trade', type: 'role' },
       ],
     },
   },
@@ -144,6 +185,16 @@ export const classicalSkills: Skill[] = [
         'Rulings documented',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'courthouse', name: 'Courthouse', description: 'Administer justice and settle disputes', type: 'structure' },
+        { id: 'palace', name: 'Palace', description: 'Center of governance', type: 'structure' },
+      ],
+      units: [
+        { id: 'judge', name: 'Judge', description: 'Interpret and apply laws', type: 'role' },
+        { id: 'diplomat', name: 'Diplomat', description: 'Negotiate with other groups', type: 'role' },
+      ],
+    },
   },
   {
     id: 'philosophy',
@@ -169,6 +220,16 @@ export const classicalSkills: Skill[] = [
       requirements: [
         'Position defended in debate',
         'Revised essay incorporating feedback',
+      ],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'forum', name: 'Forum', description: 'Public space for debate and discourse', type: 'structure' },
+        { id: 'school-of-philosophy', name: 'School of Philosophy', description: 'Train thinkers and debaters', type: 'structure' },
+      ],
+      units: [
+        { id: 'philosopher', name: 'Philosopher', description: 'Explore ideas and wisdom', type: 'role' },
+        { id: 'orator', name: 'Orator', description: 'Persuade through speech', type: 'role' },
       ],
     },
   },
@@ -197,6 +258,16 @@ export const classicalSkills: Skill[] = [
       requirements: [
         'Short play performed',
         'Director notes documenting process',
+      ],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'amphitheater', name: 'Amphitheater', description: 'Venue for theatrical performances', type: 'structure' },
+        { id: 'theater', name: 'Theater', description: 'Indoor performance space', type: 'structure' },
+      ],
+      units: [
+        { id: 'actor', name: 'Actor', description: 'Perform dramatic roles', type: 'role' },
+        { id: 'playwright', name: 'Playwright', description: 'Write plays and scripts', type: 'role' },
       ],
     },
   },
@@ -228,6 +299,16 @@ export const classicalSkills: Skill[] = [
         'Revision history documented',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'great-library', name: 'Great Library', description: 'Major repository of knowledge (Wonder prerequisite)', type: 'structure' },
+        { id: 'scriptorium', name: 'Scriptorium', description: 'Copy and preserve texts', type: 'structure' },
+      ],
+      units: [
+        { id: 'author', name: 'Author', description: 'Create literary works', type: 'role' },
+        { id: 'poet', name: 'Poet', description: 'Compose poetry and verse', type: 'role' },
+      ],
+    },
   },
   {
     id: 'astronomy',
@@ -256,6 +337,16 @@ export const classicalSkills: Skill[] = [
         'Accurate celestial prediction made',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'observatory-advanced', name: 'Observatory', description: 'Advanced celestial observation', type: 'structure' },
+        { id: 'astrolabe-workshop', name: 'Astrolabe Workshop', description: 'Produce navigation instruments', type: 'structure' },
+      ],
+      units: [
+        { id: 'astronomer-advanced', name: 'Astronomer', description: 'Study celestial bodies', type: 'role' },
+        { id: 'navigator-celestial', name: 'Celestial Navigator', description: 'Navigate using stars', type: 'role' },
+      ],
+    },
   },
   {
     id: 'optics',
@@ -282,6 +373,14 @@ export const classicalSkills: Skill[] = [
       requirements: [
         'Simple telescope or microscope built',
         'Tests documenting magnification',
+      ],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'lens-workshop', name: 'Lens Workshop', description: 'Grind and polish lenses', type: 'structure' },
+      ],
+      units: [
+        { id: 'optician', name: 'Optician', description: 'Create optical instruments', type: 'role' },
       ],
     },
   },
@@ -313,6 +412,17 @@ export const classicalSkills: Skill[] = [
         'Care log maintained',
       ],
     },
+    unlocks: {
+      buildings: [
+        { id: 'stables', name: 'Stables', description: 'House and train horses', type: 'structure' },
+        { id: 'riding-school', name: 'Riding School', description: 'Train riders', type: 'structure' },
+      ],
+      units: [
+        { id: 'cavalry', name: 'Cavalry', description: 'Mounted warrior', type: 'role' },
+        { id: 'horse-archer', name: 'Horse Archer', description: 'Mounted ranged fighter', type: 'capability' },
+        { id: 'courier', name: 'Courier', description: 'Fast mounted messenger', type: 'role' },
+      ],
+    },
   },
   {
     id: 'trapping',
@@ -341,6 +451,15 @@ export const classicalSkills: Skill[] = [
       requirements: [
         'Tracking journal maintained',
         'Habitat map created',
+      ],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'trapper-camp', name: 'Trapper Camp', description: 'Base for wildlife management', type: 'structure' },
+      ],
+      units: [
+        { id: 'trapper', name: 'Trapper', description: 'Manage wildlife populations', type: 'role' },
+        { id: 'tracker', name: 'Tracker', description: 'Follow animal trails', type: 'role' },
       ],
     },
   },

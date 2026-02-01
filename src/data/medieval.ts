@@ -24,8 +24,17 @@ export const medievalSkills: Skill[] = [
     ],
     artifact: {
       description: 'Mechanism that converts motion reliably',
-      requirements: [
-        'Mechanism converts motion reliably',
+      requirements: ['Mechanism converts motion reliably'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'watermill', name: 'Watermill', description: 'Harness water power for grinding and work', type: 'structure' },
+        { id: 'windmill', name: 'Windmill', description: 'Harness wind power', type: 'structure' },
+        { id: 'clocktower', name: 'Clocktower', description: 'Mechanical timekeeping for the community', type: 'structure' },
+      ],
+      units: [
+        { id: 'machinist', name: 'Machinist', description: 'Build and maintain machinery', type: 'role' },
+        { id: 'clockmaker', name: 'Clockmaker', description: 'Create precision timepieces', type: 'role' },
       ],
     },
   },
@@ -53,9 +62,15 @@ export const medievalSkills: Skill[] = [
     ],
     artifact: {
       description: 'Waypoint course without GPS with log',
-      requirements: [
-        'Waypoint course completed without GPS',
-        'Navigation log maintained',
+      requirements: ['Waypoint course completed without GPS', 'Navigation log maintained'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'navigation-school', name: 'Navigation School', description: 'Train navigators', type: 'structure' },
+      ],
+      units: [
+        { id: 'navigator', name: 'Navigator', description: 'Guide ships and expeditions', type: 'role' },
+        { id: 'explorer', name: 'Explorer', description: 'Discover new territories', type: 'role' },
       ],
     },
   },
@@ -82,9 +97,16 @@ export const medievalSkills: Skill[] = [
     ],
     artifact: {
       description: 'Teach a skill with learner results',
-      requirements: [
-        'Skill taught to another person',
-        'Learner results documented',
+      requirements: ['Skill taught to another person', 'Learner results documented'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'university', name: 'University', description: 'Higher learning institution', type: 'structure' },
+        { id: 'school', name: 'School', description: 'Educate the next generation', type: 'structure' },
+      ],
+      units: [
+        { id: 'teacher', name: 'Teacher', description: 'Educate others in skills', type: 'role' },
+        { id: 'scholar', name: 'Scholar', description: 'Research and advance knowledge', type: 'role' },
       ],
     },
   },
@@ -111,9 +133,17 @@ export const medievalSkills: Skill[] = [
     ],
     artifact: {
       description: 'Comparative map with respectful debate',
-      requirements: [
-        'Comparative map of belief systems',
-        'Respectful debate conducted',
+      requirements: ['Comparative map of belief systems', 'Respectful debate conducted'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'temple', name: 'Temple', description: 'Place of worship and community', type: 'structure' },
+        { id: 'monastery', name: 'Monastery', description: 'Center for religious study and preservation', type: 'structure' },
+        { id: 'cathedral', name: 'Cathedral', description: 'Grand religious structure (Wonder prerequisite)', type: 'structure' },
+      ],
+      units: [
+        { id: 'monk', name: 'Monk/Scholar', description: 'Preserve and copy knowledge', type: 'role' },
+        { id: 'missionary', name: 'Missionary', description: 'Spread ideas and beliefs', type: 'role' },
       ],
     },
   },
@@ -141,11 +171,17 @@ export const medievalSkills: Skill[] = [
     ],
     artifact: {
       description: 'Run a micro-agency with intake, decisions, and logs',
-      requirements: [
-        'Micro-agency operated',
-        'Intake process documented',
-        'Decisions recorded',
-        'Activity logs maintained',
+      requirements: ['Micro-agency operated', 'Intake process documented', 'Decisions recorded', 'Activity logs maintained'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'town-hall', name: 'Town Hall', description: 'Center of local administration', type: 'structure' },
+        { id: 'tax-office', name: 'Tax Office', description: 'Collect and manage public funds', type: 'structure' },
+        { id: 'census-bureau', name: 'Census Bureau', description: 'Track population and resources', type: 'structure' },
+      ],
+      units: [
+        { id: 'bureaucrat', name: 'Bureaucrat', description: 'Administer public systems', type: 'role' },
+        { id: 'tax-collector', name: 'Tax Collector', description: 'Collect public revenue', type: 'role' },
       ],
     },
   },
@@ -172,10 +208,17 @@ export const medievalSkills: Skill[] = [
     ],
     artifact: {
       description: 'Service project with code and reflection',
-      requirements: [
-        'Service project completed',
-        'Personal code written',
-        'Reflection documented',
+      requirements: ['Service project completed', 'Personal code written', 'Reflection documented'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'castle', name: 'Castle', description: 'Fortified residence and defense', type: 'structure' },
+        { id: 'barracks', name: 'Barracks', description: 'Train and house warriors', type: 'structure' },
+        { id: 'tournament-ground', name: 'Tournament Ground', description: 'Host competitions and jousts', type: 'structure' },
+      ],
+      units: [
+        { id: 'knight', name: 'Knight', description: 'Mounted warrior with code of honor', type: 'role' },
+        { id: 'squire', name: 'Squire', description: 'Knight in training', type: 'role' },
       ],
     },
   },
@@ -203,9 +246,17 @@ export const medievalSkills: Skill[] = [
     ],
     artifact: {
       description: 'Run a mini guild with peer certification',
-      requirements: [
-        'Mini guild organized',
-        'Peer certification process established',
+      requirements: ['Mini guild organized', 'Peer certification process established'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'guild-hall', name: 'Guild Hall', description: 'Headquarters for trade organization', type: 'structure' },
+        { id: 'trade-school', name: 'Trade School', description: 'Train apprentices in crafts', type: 'structure' },
+      ],
+      units: [
+        { id: 'master-craftsman', name: 'Master Craftsman', description: 'Expert in a trade who can certify others', type: 'certification' },
+        { id: 'apprentice', name: 'Apprentice', description: 'Learning a trade under a master', type: 'role' },
+        { id: 'journeyman', name: 'Journeyman', description: 'Skilled worker seeking mastery', type: 'role' },
       ],
     },
   },

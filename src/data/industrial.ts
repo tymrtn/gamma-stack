@@ -23,9 +23,16 @@ export const industrialSkills: Skill[] = [
     ],
     artifact: {
       description: 'Replicated experiment with writeup',
-      requirements: [
-        'Experiment replicated',
-        'Writeup documenting methodology and results',
+      requirements: ['Experiment replicated', 'Writeup documenting methodology and results'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'research-lab', name: 'Research Laboratory', description: 'Conduct scientific experiments', type: 'structure' },
+        { id: 'science-academy', name: 'Science Academy', description: 'Train scientists and researchers', type: 'structure' },
+      ],
+      units: [
+        { id: 'scientist', name: 'Scientist', description: 'Conduct research and experiments', type: 'role' },
+        { id: 'researcher', name: 'Researcher', description: 'Investigate and document findings', type: 'role' },
       ],
     },
   },
@@ -51,9 +58,17 @@ export const industrialSkills: Skill[] = [
     ],
     artifact: {
       description: 'Safe steam model or demo with efficiency notes',
-      requirements: [
-        'Safe steam model or demonstration',
-        'Efficiency notes documented',
+      requirements: ['Safe steam model or demonstration', 'Efficiency notes documented'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'factory', name: 'Factory', description: 'Mass production using steam power', type: 'structure' },
+        { id: 'power-plant-steam', name: 'Steam Power Plant', description: 'Generate power from steam', type: 'structure' },
+        { id: 'ironworks', name: 'Ironworks', description: 'Large-scale iron production', type: 'structure' },
+      ],
+      units: [
+        { id: 'steam-engineer', name: 'Steam Engineer', description: 'Operate and maintain steam engines', type: 'role' },
+        { id: 'factory-worker', name: 'Factory Worker', description: 'Operate industrial machinery', type: 'role' },
       ],
     },
   },
@@ -80,9 +95,17 @@ export const industrialSkills: Skill[] = [
     ],
     artifact: {
       description: 'Logistics plan with simulation results',
-      requirements: [
-        'Logistics plan created',
-        'Simulation results documented',
+      requirements: ['Logistics plan created', 'Simulation results documented'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'train-station', name: 'Train Station', description: 'Hub for rail transport', type: 'structure' },
+        { id: 'rail-yard', name: 'Rail Yard', description: 'Sort and organize rail cars', type: 'structure' },
+        { id: 'depot', name: 'Depot', description: 'Store and maintain locomotives', type: 'structure' },
+      ],
+      units: [
+        { id: 'train-engineer', name: 'Train Engineer', description: 'Operate locomotives', type: 'role' },
+        { id: 'logistics-manager', name: 'Logistics Manager', description: 'Coordinate transport networks', type: 'role' },
       ],
     },
   },
@@ -110,9 +133,17 @@ export const industrialSkills: Skill[] = [
     ],
     artifact: {
       description: 'Powered device with measured output',
-      requirements: [
-        'Powered device built',
-        'Output measured and documented',
+      requirements: ['Powered device built', 'Output measured and documented'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'power-plant', name: 'Power Plant', description: 'Generate electrical power', type: 'structure' },
+        { id: 'power-grid', name: 'Power Grid', description: 'Distribute electricity', type: 'system' },
+        { id: 'electric-workshop', name: 'Electric Workshop', description: 'Build electrical devices', type: 'structure' },
+      ],
+      units: [
+        { id: 'electrician', name: 'Electrician', description: 'Wire and maintain electrical systems', type: 'role' },
+        { id: 'electrical-engineer', name: 'Electrical Engineer', description: 'Design electrical systems', type: 'role' },
       ],
     },
   },
@@ -139,9 +170,16 @@ export const industrialSkills: Skill[] = [
     ],
     artifact: {
       description: '20 identical parts with QA report',
-      requirements: [
-        '20 identical parts manufactured',
-        'QA report documenting consistency',
+      requirements: ['20 identical parts manufactured', 'QA report documenting consistency'],
+    },
+    unlocks: {
+      buildings: [
+        { id: 'assembly-line', name: 'Assembly Line', description: 'Mass produce standardized goods', type: 'structure' },
+        { id: 'qa-lab', name: 'QA Laboratory', description: 'Test and verify product quality', type: 'structure' },
+      ],
+      units: [
+        { id: 'quality-inspector', name: 'Quality Inspector', description: 'Ensure product standards', type: 'role' },
+        { id: 'assembly-worker', name: 'Assembly Worker', description: 'Assemble standardized products', type: 'role' },
       ],
     },
   },
